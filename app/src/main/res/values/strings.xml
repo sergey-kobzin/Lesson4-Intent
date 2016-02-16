@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Lesson 4 - Intent</string>
+    <string name="tvNotSetAlarm">Alarm is not set</string>
+    <string name="btSetAlarm">Set alarm</string>
+    <string name="btCancelAlarm">Cancel alarm</string>
+    <string name="btClose">Close</string>
+</resources>
