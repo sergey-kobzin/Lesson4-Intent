@@ -19,6 +19,7 @@ public class MainActivity extends Activity {
     private AlarmManager alarmManager;
     private Calendar alarmTime;
     private PendingIntent pendingIntent;
+    private boolean isAlarmTimeSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,9 @@ public class MainActivity extends Activity {
         Intent onSetAlarmIntent = new Intent(this, AlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, onSetAlarmIntent, 0);
 
+        alarmTime = Calendar.getInstance();
+        isAlarmTimeSet = false;
+
         final TextView currentAlarm = (TextView) findViewById(R.id.currentAlarmText);
 
         final TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
@@ -37,6 +41,7 @@ public class MainActivity extends Activity {
                 alarmTime.set(Calendar.HOUR_OF_DAY, hour);
                 alarmTime.set(Calendar.MINUTE, minute);
                 alarmTime.set(Calendar.SECOND, 0);
+                isAlarmTimeSet = true;
                 alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime.getTimeInMillis(), pendingIntent);
                 currentAlarm.setTextSize(120);
                 currentAlarm.setText(((hour < 10) ? "0" + hour : hour) + ":" + ((minute < 10) ? "0" + minute : minute));
@@ -47,9 +52,8 @@ public class MainActivity extends Activity {
         setAlarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (alarmTime == null) {
+                if (!isAlarmTimeSet) {
                     alarmTime = Calendar.getInstance();
-                    alarmTime.set(Calendar.SECOND, 0);
                 }
                 timePickerDialog.updateTime(alarmTime.get(Calendar.HOUR_OF_DAY), alarmTime.get(Calendar.MINUTE));
                 timePickerDialog.show();
@@ -60,8 +64,8 @@ public class MainActivity extends Activity {
         cancelAlarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                alarmTime = null;
                 alarmManager.cancel(pendingIntent);
+                isAlarmTimeSet = false;
                 currentAlarm.setTextSize(40);
                 currentAlarm.setText(R.string.tvNotSetAlarm);
             }

@@ -25,6 +25,7 @@ public class AlarmActivity extends Activity {
         currentAlarm.setText(((hour < 10) ? "0" + hour : hour) + ":" + ((minute < 10) ? "0" + minute : minute));
 
         final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.din_don);
+        mediaPlayer.setLooping(true);
         mediaPlayer.start();
 
         Button closeButton = (Button) findViewById(R.id.closeButton);
